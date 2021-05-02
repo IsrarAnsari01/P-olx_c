@@ -1,0 +1,21 @@
+const cetagory = ["Vehicals", "Mobile", "Computers", "Clothes"]
+const [selectedCetagory, setSelectedCetagory] = useState("")
+<Col size={50}>
+                            <Form style={{ padding: 5 }}>
+                                <Item picker>
+                                    <Picker
+                                        mode="dropdown"
+                                        iosIcon={<Icon name="arrow-down" />}
+                                        style={{ width: undefined }}
+                                        placeholder="Search by Cetagory"
+                                        placeholderStyle={{ color: "#bfc6ea" }}
+                                        placeholderIconColor="#007aff"
+                                        selectedValue={selectedCetagory}
+                                        onValueChange={val => setSelectedCetagory(val)}
+                                    >
+                                        <Picker.Item label="Seact By Cetagory" value="#" />
+                                        {cetagory.map(c => <Picker.Item label={c} value={c} key={++SNO} />)}
+                                    </Picker>
+                                </Item>
+                            </Form>
+                        </Col>
