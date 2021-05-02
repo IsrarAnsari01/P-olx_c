@@ -31,4 +31,4 @@ General - A user can be a buyer for a product and seller for another product at 
 [App UI](https://www.linkedin.com/feed/update/urn:li:activity:6792171477442678784/)
 **I was Record that video before writing the functionality so the screen of the update form is not present in that video and also I make changes in the products screen and in the header of the app which was also not recorded**
 ## Note!
-**This is my institute final project so I bypass the form validation but I implemented in future **
+**This is my institute final project so I bypass the form validation but I implemented in future**
