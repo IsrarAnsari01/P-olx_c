@@ -1,4 +1,4 @@
-# Project 02 | OlX Like App
+# Project 02 | OlX type App
 ## Functionality 
 ### User Roles:
 General - A user can be a buyer for a product and seller for another product at the same time.
