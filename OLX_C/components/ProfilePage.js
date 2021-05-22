@@ -46,9 +46,14 @@ export default function ProfilePage({ navigation }) {
             axios.get(`${AppSetting.Back_END_HOSTED_SERVER}/user/delete-user/${loginUser._id}`)
                 .then(res => {
                     if (res.status) {
-                        dispatch({
-                            type: "Logout",
-                        })
+                        axios.get(`${AppSetting.Back_END_HOSTED_SERVER}/prod`)
+                            .then(succ => {
+                                if (succ.status) {
+                                    dispatch({
+                                        type: "Logout",
+                                    })
+                                }
+                            })
                         navigation.navigate("Login")
                     }
                 }).catch(err => {

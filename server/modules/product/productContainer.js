@@ -68,7 +68,7 @@ module.exports.findSpecficCetagoryProduct = (req, res) => {
         })
 }
 module.exports.findSpecficCetagoryAndSubCetagoryProduct = (req, res) => {
-    const query = req.body.details 
+    const query = req.body.details
     adModel.findSpecificCetagoryAndSubCetagoryAd(query)
         .then(succ => {
             res.send({ status: true, sortedArray: succ })
@@ -79,6 +79,16 @@ module.exports.findSpecficCetagoryAndSubCetagoryProduct = (req, res) => {
 module.exports.specificUserAds = (req, res) => {
     const userId = req.params.id
     adModel.fintSpecificUserAds(userId)
+        .then(succ => {
+            res.send({ status: true, specficUserAd: succ })
+        }).catch(err => {
+            res.send({ status: false, err: err })
+
+        })
+}
+module.exports.deleteAllAdOfSameUser = (req, res) => {
+    const userId = req.params.id
+    adModel.findAndDeleteAllAdsOfSameUser(userId)
         .then(succ => {
             res.send({ status: true, specficUserAd: succ })
         }).catch(err => {

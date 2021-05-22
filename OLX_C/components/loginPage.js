@@ -8,7 +8,7 @@ export default function loginPage({ navigation }) {
         <Container>
             <Header style={{ backgroundColor: "#1e3326" }}>
                 <Left>
-                    <Icon name='arrow-back' style={{ color: 'white' }} onPress={() => navigation.navigate("Home")} />
+                    <Icon name='arrow-back' style={{ color: 'white' }} onPress={() => navigation.goBack()} />
                 </Left>
                 <Body />
             </Header>

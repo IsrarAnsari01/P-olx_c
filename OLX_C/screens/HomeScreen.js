@@ -123,9 +123,9 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     forRecomText: {
-        fontSize: 30,
+        fontSize: 25,
         fontFamily: 'sans-serif-condensed',
-        letterSpacing: 5,
+        // letterSpacing: 5,
         textAlign: 'center',
         fontWeight: 'bold',
         borderRadius: 8,

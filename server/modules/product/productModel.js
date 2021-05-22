@@ -117,4 +117,18 @@ module.exports.deleteSingleWithQuery = (query) => {
             })
     })
 }
-
+module.exports.findAndDeleteAllAdsOfSameUser = (userId) => {
+    const query = {
+        userInfo: userId
+    }
+    return new Promise((resolve, reject) => {
+        productModel.deleteMany(query)
+            .then(ad => {
+                resolve(ad)
+            })
+            .catch(err => {
+                console.log("Unable to Delete Ads, query ", query);
+                reject(err)
+            })
+    })
+}

@@ -11,5 +11,5 @@ router.get("/specificUserAd/:id", adContainer.specificUserAds)
 router.get("/deleteAd/:id", adContainer.delSpecificadd)
 router.post("/findSpecficCetagoryAd", adContainer.findSpecficCetagoryProduct)
 router.post("/findSortedProduct", adContainer.findSpecficCetagoryAndSubCetagoryProduct)
-
+router.get("/delete-all-products-of-same-user/:id", adContainer.deleteAllAdOfSameUser)
 module.exports = router;

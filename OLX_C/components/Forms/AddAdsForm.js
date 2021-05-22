@@ -76,39 +76,43 @@ export default function AddAdsForm() {
     }
 
     const saveNewAd = () => {
-        if (productName.length === 0 && price.length === 0 && number.length === 0 && homeAddress.length === 0 && details.length === 0 && coverImageUrl.length === 0) {
-            alert("Every Field Should be Filled")
-            setGetResponseFromServer(false)
-            return
+        let datatoSend = {
+            adDetails: { productName, price, number, cetagory, subcetagory, homeAddress, details, userInfo: loginUser._id }
         }
-        setGetResponseFromServer(true)
-        let base64Img = `data:image/jpg;base64,${coverImageUrl}`;
-        let data = {
-            "file": base64Img,
-            "upload_preset": "wcdlvs5y",
-        }
-        fetch(CLOUDINARY_URL, { body: JSON.stringify(data), headers: { 'content-type': 'application/json' }, method: 'POST', })
-            .then(r => r.json())
-            .then(cloundnaryUploadedImageUrl => {
-                let datatoSend = {
-                    adDetails: { productName, price, number, cetagory, subcetagory, homeAddress, details, coverImageUrl: cloundnaryUploadedImageUrl.url, userInfo: loginUser._id }
-                }
-                return axios.post(`${AppSetting.Back_END_HOSTED_SERVER}/product/add-new`, datatoSend)
-                    .then(ad => {
-                        if (ad.status) {
-                            cleanFields()
-                            alert("Ad added Successfuly")
-                            return
-                        }
-                    })
+        console.log(datatoSend)
+        // if (productName.length === 0 && price.length === 0 && number.length === 0 && homeAddress.length === 0 && details.length === 0 && coverImageUrl.length === 0) {
+        //     alert("Every Field Should be Filled")
+        //     setGetResponseFromServer(false)
+        //     return
+        // }
+        // setGetResponseFromServer(true)
+        // let base64Img = `data:image/jpg;base64,${coverImageUrl}`;
+        // let data = {
+        //     "file": base64Img,
+        //     "upload_preset": "wcdlvs5y",
+        // }
+        // fetch(CLOUDINARY_URL, { body: JSON.stringify(data), headers: { 'content-type': 'application/json' }, method: 'POST', })
+        //     .then(r => r.json())
+        //     .then(cloundnaryUploadedImageUrl => {
+        //         let datatoSend = {
+        //             adDetails: { productName, price, number, cetagory, subcetagory, homeAddress, details, coverImageUrl: cloundnaryUploadedImageUrl.url, userInfo: loginUser._id }
+        //         }
+        //         return axios.post(`${AppSetting.Back_END_HOSTED_SERVER}/product/add-new`, datatoSend)
+        //             .then(ad => {
+        //                 if (ad.status) {
+        //                     cleanFields()
+        //                     alert("Ad added Successfuly")
+        //                     return
+        //                 }
+        //             })
 
-            })
-            .catch(err => {
-                console.log("Error in uploading Image", err)
-            }).finally(() => {
-                setGetResponseFromServer(false)
-                setIsFileSelected(false)
-            })
+        //     })
+        //     .catch(err => {
+        //         console.log("Error in uploading Image", err)
+        //     }).finally(() => {
+        //         setGetResponseFromServer(false)
+        //         setIsFileSelected(false)
+        //     })
     }
     const cleanFields = () => {
         setCetagory(undefined)
@@ -127,7 +131,6 @@ export default function AddAdsForm() {
         let modifiedCategoryIndex = prdSubCategories.findIndex(prdSubCategory => prdSubCategory.id === prd.id)
         prdSubCategories[modifiedCategoryIndex].isSelected = !prdSubCategories[modifiedCategoryIndex].isSelected
         setPrdSubCategories([...prdSubCategories])
-        console.log(prdSubCategories[modifiedCategoryIndex])
     };
 
     return <>
