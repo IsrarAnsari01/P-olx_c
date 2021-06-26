@@ -15,6 +15,7 @@ General - A user can be a buyer for a product and seller for another product at 
 * User can add items in wish list and card items
 * After Signin or Login user get their profile page in which user can see their wish list item , card list items and can see their posted ads, user can also delete wish list item, card list item and posted ad as well  
 * User Update their information
+* Form Restriction using REGEX
 * Real time chat feature customer can chat with seller as well as other people
   - Demo Video 
     - [chatFeatureLink](https://www.facebook.com/100025070777476/videos/889180105261007)
