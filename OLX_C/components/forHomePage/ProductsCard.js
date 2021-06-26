@@ -23,9 +23,13 @@ export default function ProductsCard(props) {
                 console.log("Error in Fetching Products", err)
             })
     }
+    let i = 0;
     useEffect(() => {
-        getProductsFromDb()
-    }, [])
+        navigation.addListener('focus', () => {
+            getProductsFromDb()
+            console.log("Inside productsCard use Effect", ++i)
+        });
+    }, [props.navigation])
     return <>
         <Grid style={{ marginVertical: 10, marginHorizontal: 10 }}>
             {topFourProducts && topFourProducts.length === 0 ? <Card>

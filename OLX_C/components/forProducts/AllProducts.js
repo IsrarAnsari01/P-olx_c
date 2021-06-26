@@ -50,11 +50,14 @@ export default function AllProducts(props) {
     const [filterArray, setFilterArray] = useState(null)
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [page, setPage] = useState(1);
-
+    let i = 0
     useEffect(() => {
-        getProductsFromDb()
-        setIsSelectedForNested(false)
-    }, [])
+        props.navigation.addListener('focus', () => {
+            getProductsFromDb()
+            setIsSelectedForNested(false)
+            console.log("Inside Product use Effect", ++i)
+        });
+    }, [props.navigation])
     const getProductsFromDb = () => {
         axios.get(`${AppSetting.Back_END_HOSTED_SERVER}/product`)
             .then(succ => {
@@ -136,14 +139,14 @@ export default function AllProducts(props) {
         return <List key={item._id}>
             <ListItem>
                 <Left>
-                    <Image source={{ uri: `${item.coverImageUrl}` }} style={{ height: 150, flex: 1 }} />
+                    <Image source={{ uri: `${item.coverImageUrl}` }} style={{ height: 180, flex: 1 }} />
                 </Left>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
                     <Body style={{ position: 'relative' }}>
-                        <Text style={{ fontSize: 25, fontWeight: 'bold', paddingVertical: 10 }}> {item.productName.length > 15 ? item.productName.substr(0, 10) + "...." : item.productName} </Text>
+                        <Text style={{ fontSize: 25, fontWeight: 'bold', paddingVertical: 10 }}> {item.productName.length > 10 ? item.productName.substr(0, 10) + "...." : item.productName} </Text>
                         <Text>Price | {item.price}</Text>
                         <Text>Location | {item.homeAddress} </Text>
-                        <Button success full style={{ borderRadius: 20, padding: 10, margin: 10 }}
+                        <Button success full style={{ borderRadius: 10, padding: 10, margin: 10 }}
                             onPress={() => userInfo ? props.navigation.navigate("SingleProduct", { productId: item._id }) : props.navigation.navigate("Login")}>
                             <Text>Buy Now</Text>
                         </Button>

@@ -23,7 +23,9 @@ export default function ProfilePage({ navigation }) {
             navigation.navigate("Login")
             return
         }
-        getPostedJobsByThisUser(loginUser._id)
+        navigation.addListener('focus', () => {
+            getPostedJobsByThisUser(loginUser._id)
+        });
     }, [])
     const dispatch = useDispatch()
     var BUTTONS = [
@@ -103,11 +105,20 @@ export default function ProfilePage({ navigation }) {
     const deleteThisProduct = (id) => {
         axios.get(`${AppSetting.Back_END_HOSTED_SERVER}/product/deleteAd/${id}`)
             .then(succ => {
-                if (succ.status) {
-                    alert("Successfully Deleted This Ad")
-                    getPostedJobsByThisUser(loginUser._id)
-                    return
-                }
+                return axios.get(`${AppSetting.Back_END_HOSTED_SERVER}/user/removeSpecficProductFromStudentCardItem/${id}`)
+                    .then(success => {
+                        if (success.status) {
+                            axios.get(`${AppSetting.Back_END_HOSTED_SERVER}/user/removeSpecficProductFromStudentWishItem/${id}`)
+                                .then(finalSucc => {
+                                    if (finalSucc.status) {
+                                        alert("Successfully Deleted This Ad")
+                                        getPostedJobsByThisUser(loginUser._id)
+                                        return;
+                                    }
+                                })
+                        }
+                    })
+
             }).catch(err => {
                 console.log("Error in Deleting JOb", err)
             })

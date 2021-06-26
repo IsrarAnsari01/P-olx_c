@@ -170,3 +170,36 @@ module.exports.deleteSingleWithQuery = (query) => {
     })
 }
 
+module.exports.updateAllUserCardItem = (productId) => {
+    return new Promise((resolve, reject) => {
+        userModel.updateMany(
+            {},
+            { $pull: { card: { productId: productId } } },
+            { multi: true },
+        )
+            .then(removedJobDeleted => {
+                resolve(removedJobDeleted)
+            }).catch(err => {
+                console.log("Something went Wrong Error in deleting card item ", err)
+                reject(err)
+            })
+
+    })
+}
+
+module.exports.updateAllUserWishlist = (productId) => {
+    return new Promise((resolve, reject) => {
+        userModel.updateMany(
+            {},
+            { $pull: { wishlist: { productId: productId } } },
+            { multi: true },
+        )
+            .then(removedCardProduct => {
+                resolve(removedCardProduct)
+            }).catch(err => {
+                console.log("Something went Wrong Error in deleting card item ", err)
+                reject(err)
+            })
+
+    })
+}

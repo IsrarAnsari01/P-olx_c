@@ -154,3 +154,24 @@ module.exports.delSpecificUser = (req, res) => {
             res.send({ status: false, err: err })
         })
 }
+
+module.exports.delSpecificProductFromUserCard = (req, res) => {
+    const productId = req.body.productId;
+    userModel.updateAllUserCardItem(productId)
+        .then(succ => {
+            res.send({ status: true, succ: succ })
+        }).catch(err => {
+            res.send({ status: false, err: err })
+        })
+}
+
+module.exports.delSpecificProductFromUserWishlist = (req, res) => {
+    const productId = req.body.productId;
+    userModel.updateAllUserWishlist(productId)
+        .then(succ => {
+            res.send({ status: true, succ: succ })
+        }).catch(err => {
+            res.send({ status: false, err: err })
+        })
+}
+

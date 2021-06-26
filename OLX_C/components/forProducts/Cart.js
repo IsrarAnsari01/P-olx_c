@@ -30,11 +30,11 @@ export default function Cart({ navigation }) {
                             <Text style={{ fontFamily: 'sans-serif-medium', fontSize: 25 }}>Products</Text>
                         </CardItem>
                     </Card>
-                    {loginUser.wishlist.length === 0 ? <Card>
+                    {loginUser.wishlist && loginUser.wishlist.length === 0 ? <Card>
                         <CardItem>
                             <Text style={{ color: 'red' }}> Currently you have 0 Items in your wishList </Text>
                         </CardItem>
-                    </Card> : loginUser.wishlist.map(wish => <List>
+                    </Card> : loginUser.wishlist && loginUser.wishlist.map(wish => <List>
                         <ListItem thumbnail>
                             <Left>
                                 <Thumbnail square source={{ uri: `${wish.productImage}` }} style={{ height: 100, width: 150 }} />
@@ -50,18 +50,16 @@ export default function Cart({ navigation }) {
                             </Right>
                         </ListItem>
                     </List>)}
-                    <Card style = {{ marginVertical: 10}}>
+                    <Card style={{ marginVertical: 10 }}>
                         <CardItem style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-                            <Text style={{ fontSize: 30, fontFamily: 'notoserif' }}>
-                                Items in Card
-                            </Text>
+                            <Text style={{ fontSize: 30, fontFamily: 'notoserif' }}> Items in Card </Text>
                         </CardItem>
                     </Card>
-                    {loginUser.card.length === 0 ? <Card key={card.productId}>
-                        <CardItem style={{marginVertical: 10}}>
+                    {loginUser.card && loginUser.card.length === 0 ? <Card>
+                        <CardItem style={{ marginVertical: 10 }}>
                             <Text style={{ color: 'red' }}> Currently you have 0 Items in your Cart </Text>
                         </CardItem>
-                    </Card> : loginUser.card.map(c => <List>
+                    </Card> : loginUser.wishlist && loginUser.card.map(c => <List>
                         <ListItem thumbnail>
                             <Left>
                                 <Thumbnail square source={{ uri: `${c.productImage}` }} style={{ height: 100, width: 150 }} />

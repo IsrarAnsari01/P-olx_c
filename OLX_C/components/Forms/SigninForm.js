@@ -15,12 +15,18 @@ export default function SigninForm(props) {
     const [homeAddress, setHomeAddress] = useState('')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
-    let [userImageUrl, setUserImageurl] = useState('')
+    const [userImageUrl, setUserImageurl] = useState('')
+    const [emailValidation, setEmailValidation] = useState(false)
+    const [passwordValidation, setPasswordValidation] = useState(false)
+    const [nameValidation, setNameValidation] = useState(false)
+    const [whatsappValidation, setWhatsappValidation] = useState(false)
+    const [addressValidation, setAddressValidation] = useState(false)
+    const [rePasswordValidation, setRePasswordValidation] = useState(false)
+    const [fieldErr, setFieldErr] = useState(false)
     const selectOneImage = async () => {
         let options = {
             mediaType: "photo",
             includeBase64: true,
-            // maxWidth: 460,
             maxHeight: 200,
             quality: 1,
             saveToPhotos: true,
@@ -37,42 +43,117 @@ export default function SigninForm(props) {
             setIsFileSelected(true)
         })
     }
+    let regexForName = /^[A-Za-z .0-9]{3,}$/
+    let regexForPassword = /^(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,16}$/
+    let regexForEmail = /^[A-Za-z_0-9]{3,}@[A-Za-z_0-9]{3,}[.][A-Za-z.]{2,}$/
+    let regexUserPhoneNumber = /^[0-9]{11,}$/
+    let regexHomeAddress = /^[0-9a-zA-Z,#-- ]{3,}$/
     const sendInformationToServer = () => {
         setGetResponseFromServer(true)
-        if (name.length === 0 && email.length === 0 && whatsapp.length === 0 && homeAddress.length === 0 && password.length === 0 && rePassword.length === 0 && userImageUrl.length === 0) {
-            alert("Every Field Should be Filled")
-            setGetResponseFromServer(false)
-        } else if (password != rePassword) {
-            alert("Password Does not match")
-            setGetResponseFromServer(false)
-        } else {
-            let base64Img = `data:image/jpg;base64,${userImageUrl}`;
-            let data = {
-                "file": base64Img,
-                "upload_preset": "wcdlvs5y",
-            }
-            fetch(CLOUDINARY_URL, { body: JSON.stringify(data), headers: { 'content-type': 'application/json' }, method: 'POST', })
-                .then(r => r.json())
-                .then(cloundnaryUploadedImageUrl => {
-                    let userInfo = {
-                        userInfo: { name, email, whatsapp, homeAddress, password, userImageUrl: cloundnaryUploadedImageUrl.url }
-                    }
-                    return axios.post(`${AppSetting.Back_END_HOSTED_SERVER}/user/add-new`, userInfo)
-                        .then(succ => {
-                            if (succ.status) {
-                                cleanFields()
-                                props.navigation.navigate("Login")
-                                return
-                            }
-                        })
-                })
-                .catch(err => {
-                    console.log("Error in uploading Image", err)
-                }).finally(() => {
-                    setGetResponseFromServer(false)
-                    setIsFileSelected(false)
-                })
+        if (!(name && email && password && rePassword && whatsapp && homeAddress && userImageUrl)) {
+            setFieldErr(true);
+            setEmailValidation(false)
+            setPasswordValidation(false)
+            setNameValidation(false)
+            setWhatsappValidation(false)
+            setAddressValidation(false)
+            setGetResponseFromServer(false);
+            setRePasswordValidation(false)
+            return;
+        } else if (password !== rePassword) {
+            setFieldErr(false);
+            setEmailValidation(false)
+            setPasswordValidation(false)
+            setNameValidation(false)
+            setWhatsappValidation(false)
+            setAddressValidation(false)
+            setGetResponseFromServer(false);
+            setRePasswordValidation(true)
+            return;
+        } else if (!(regexForName.test(name))) {
+            setFieldErr(false);
+            setEmailValidation(false)
+            setPasswordValidation(false)
+            setNameValidation(true)
+            setWhatsappValidation(false)
+            setAddressValidation(false)
+            setGetResponseFromServer(false);
+            setRePasswordValidation(false)
+            return;
+        } else if (!(regexForEmail.test(email))) {
+            setFieldErr(false);
+            setEmailValidation(true)
+            setPasswordValidation(false)
+            setNameValidation(false)
+            setWhatsappValidation(false)
+            setAddressValidation(false)
+            setGetResponseFromServer(false);
+            setRePasswordValidation(false)
+            return;
+        } else if (!(regexForPassword.test(password))) {
+            setFieldErr(false);
+            setEmailValidation(false)
+            setPasswordValidation(true)
+            setNameValidation(false)
+            setWhatsappValidation(false)
+            setAddressValidation(false)
+            setGetResponseFromServer(false);
+            setRePasswordValidation(false)
+            return;
+        } else if (!(regexUserPhoneNumber.test(whatsapp))) {
+            setFieldErr(false);
+            setEmailValidation(false)
+            setPasswordValidation(false)
+            setNameValidation(false)
+            setWhatsappValidation(true)
+            setAddressValidation(false)
+            setGetResponseFromServer(false);
+            setRePasswordValidation(false)
+            return;
+        } else if (!(regexHomeAddress.test(homeAddress))) {
+            setFieldErr(false);
+            setEmailValidation(false)
+            setPasswordValidation(false)
+            setNameValidation(false)
+            setWhatsappValidation(false)
+            setAddressValidation(true)
+            setRePasswordValidation(false)
+            setGetResponseFromServer(false);
+            return;
         }
+        let base64Img = `data:image/jpg;base64,${userImageUrl}`;
+        let data = {
+            "file": base64Img,
+            "upload_preset": "wcdlvs5y",
+        }
+        fetch(CLOUDINARY_URL, { body: JSON.stringify(data), headers: { 'content-type': 'application/json' }, method: 'POST', })
+            .then(r => r.json())
+            .then(cloundnaryUploadedImageUrl => {
+                let userInfo = {
+                    userInfo: { name, email, whatsapp, homeAddress, password, userImageUrl: cloundnaryUploadedImageUrl.url }
+                }
+                return axios.post(`${AppSetting.Back_END_HOSTED_SERVER}/user/add-new`, userInfo)
+                    .then(succ => {
+                        if (succ.status) {
+                            cleanFields()
+                            setFieldErr(false);
+                            setEmailValidation(false)
+                            setPasswordValidation(false)
+                            setNameValidation(false)
+                            setWhatsappValidation(false)
+                            setAddressValidation(false)
+                            setRePasswordValidation(false)
+                            props.navigation.navigate("Login")
+                            return
+                        }
+                    })
+            })
+            .catch(err => {
+                console.log("Error in uploading Image", err)
+            }).finally(() => {
+                setGetResponseFromServer(false)
+                setIsFileSelected(false)
+            })
     }
     const cleanFields = () => {
         setName('')
@@ -92,31 +173,52 @@ export default function SigninForm(props) {
         </View>
         <View style={{ backgroundColor: "#ebe6ed" }}>
             <View style={{ flex: 1, marginHorizontal: 40, }}>
+                {fieldErr ? <View>
+                    <Text style={{ color: "red" }}> *All fields must be field </Text>
+                </View> : <></>}
                 <Form>
                     <Item floatingLabel style={{ paddingVertical: 10 }}>
                         <Label style={{ color: "#640e8a" }}>Your name </Label>
                         <Input value={name} onChangeText={text => setName(text)} />
                     </Item>
+                    {nameValidation ? <View>
+                        <Text style={{ color: "red" }}> *Enter your valid name </Text>
+                    </View> : <></>}
                     <Item floatingLabel style={{ paddingVertical: 10 }}>
                         <Label style={{ color: "#640e8a" }}>WhatsApp Number </Label>
                         <Input value={whatsapp} onChangeText={text => setWhatsApp(text)} />
                     </Item>
+                    {whatsappValidation ? <View>
+                        <Text style={{ color: "red" }}> *Enter your valid whatsApp Number </Text>
+                    </View> : <></>}
                     <Item floatingLabel style={{ paddingVertical: 10 }}>
                         <Label style={{ color: "#640e8a" }}>Email Address </Label>
                         <Input value={email} onChangeText={text => setEmail(text)} />
                     </Item>
+                    {emailValidation ? <View>
+                        <Text style={{ color: "red" }}> *Enter your valid Email Address </Text>
+                    </View> : <></>}
                     <Item floatingLabel style={{ paddingVertical: 10 }}>
                         <Label style={{ color: "#640e8a" }}>Home Address </Label>
                         <Input value={homeAddress} onChangeText={text => setHomeAddress(text)} />
                     </Item>
+                    {addressValidation ? <View>
+                        <Text style={{ color: "red" }}> *Enter your valid Home Address </Text>
+                    </View> : <></>}
                     <Item floatingLabel style={{ paddingVertical: 10 }}>
                         <Label style={{ color: "#640e8a" }}>  Password </Label>
-                        <Input value={password} onChangeText={text => setPassword(text)} />
+                        <Input value={password} onChangeText={text => setPassword(text)} secureTextEntry />
                     </Item>
+                    {passwordValidation ? <View>
+                        <Text style={{ color: "red" }}> *Enter Valid password| Password contain 6 latter and one special chr </Text>
+                    </View> : <></>}
                     <Item floatingLabel style={{ paddingVertical: 10 }}>
                         <Label style={{ color: "#640e8a" }}>Repeat password </Label>
-                        <Input value={rePassword} onChangeText={text => setRePassword(text)} />
+                        <Input value={rePassword} onChangeText={text => setRePassword(text)} secureTextEntry />
                     </Item>
+                    {rePasswordValidation ? <View>
+                        <Text style={{ color: "red" }}> *Something went wrong password does not match Try again </Text>
+                    </View> : <></>}
                     {isFileSelected ?
                         <Button disabled style={{ backgroundColor: "#7f6f85", borderRadius: 100, marginVertical: 20, color: "#640e8a" }} full><Text> Image Selected </Text></Button> :
                         <Button style={{ backgroundColor: "#7f6f85", borderRadius: 100, marginVertical: 20, color: "#640e8a" }} full

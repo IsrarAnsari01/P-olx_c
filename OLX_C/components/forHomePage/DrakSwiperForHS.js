@@ -17,18 +17,21 @@ export default function DeckSwiperForOLX(props) {
                 console.log("Error in Fetching Products", err)
             })
     }
+    let i = 0
     useEffect(() => {
-        getProductsFromDb()
-        console.log(allProducts)
-    }, [])
+        props.navigation.addListener('focus', () => {
+            getProductsFromDb()
+            console.log("Inside DrakSwiper use Effect", ++i)
+        });
+    }, [props.navigation])
     return <>
-        <Container style={{ marginTop: 10, height: 550 }}>
-            <Header style={{ backgroundColor: "#f5fafa", height: 60 }}>
-                <Body>
-                    <Text style={{ fontSize: 18, paddingHorizontal: 80 }}> Recently Uploaded {recentlyUploadedFrourProducts && recentlyUploadedFrourProducts.length} Products </Text>
+        <Container style={{ marginVertical: 25, height: 500 }}>
+            <Header style={{ backgroundColor: "#f5fafa", height: 60, borderRadius: 30 }}>
+                <Body style = {{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{ fontSize: 18}}> Recently Uploaded {recentlyUploadedFrourProducts && recentlyUploadedFrourProducts.length} Products </Text>
                 </Body>
             </Header>
-            <View>
+            <View style={{ paddingHorizontal: 10 }}>
                 {recentlyUploadedFrourProducts && recentlyUploadedFrourProducts.length === 0 ? <Card>
                     <CardItem header style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontSize: 20 }}> Team OLX | IA </Text>
@@ -45,7 +48,7 @@ export default function DeckSwiperForOLX(props) {
                 </Card> : recentlyUploadedFrourProducts && <DeckSwiper
                     dataSource={recentlyUploadedFrourProducts}
                     renderItem={item =>
-                        <Card style={{ elevation: 3 }}>
+                        <Card style={{ elevation: 3, borderRadius: 10, }}>
                             <CardItem>
                                 <Left>
                                     <Thumbnail source={{ uri: item.coverImageUrl }} />
@@ -59,17 +62,14 @@ export default function DeckSwiperForOLX(props) {
                             <CardItem cardBody>
                                 <Image style={{ height: 300, flex: 1 }} source={{ uri: item.coverImageUrl }} />
                             </CardItem>
-                            <CardItem style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                                <View style={{ padding: 15, borderRadius: 40 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{item.productName.length > 15 ? item.productName.substr(0, 15) + "....." : item.productName}</Text>
-                                </View>
-                                <View style={{ padding: 15, borderRadius: 40 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 20 }}>RS: {item.price}</Text>
-                                </View>
+                            <CardItem style = {{marginTop: 5}}>
                                 <View>
-                                    <Button success style={{ borderRadius: 50 }} onPress={() => loginUser ? props.navigation.navigate("SingleProduct", { productId: item._id }) : props.navigation.navigate("Login")}>
+                                    <Button success small onPress={() => loginUser ? props.navigation.navigate("SingleProduct", { productId: item._id }) : props.navigation.navigate("Login")}>
                                         <Text> Purchase Now </Text>
                                     </Button>
+                                </View>
+                                <View style={{ padding: 10, borderRadius: 20 }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>RS: {item.price}</Text>
                                 </View>
                             </CardItem>
                         </Card>}

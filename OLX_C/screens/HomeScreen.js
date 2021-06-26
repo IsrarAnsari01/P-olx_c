@@ -24,9 +24,13 @@ export default function HomeScreen({ navigation }) {
                 console.log("Error in Fetching Products", err)
             })
     }
+    let i = 0
     useEffect(() => {
-        getProductsFromDb()
-    }, [])
+        navigation.addListener('focus', () => {
+            getProductsFromDb()
+            console.log("Inside Home Page use Effect ", ++i)
+        });
+    }, [navigation])
     function filterList(productName) {
         let filterArray = copyTopFourProducts.filter(product => product.productName.includes(productName))
         if (!filterArray) {
@@ -41,18 +45,18 @@ export default function HomeScreen({ navigation }) {
                 <Grid>
                     <Col size={100}>
                         <Item style={{ marginTop: 9 }}>
-                            <View style = {{marginLeft: 10}}>
+                            <View style={{ marginLeft: 10 }}>
                                 <Icon name="ios-search" />
                             </View>
                             <Input placeholder="Search by product Name" onChangeText={text => filterList(text)} />
-                            <View style = {{marginRight: 10}}>
+                            <View style={{ marginRight: 10 }}>
                                 <Icon name="layers-sharp" />
                             </View>
                         </Item>
                     </Col>
                 </Grid>
             </View>
-            <Content style={{ paddingVertical: 20, paddingHorizontal: 10 }}>
+            <Content style={{ paddingVertical: 10, paddingHorizontal: 10}}>
                 <DeckSwiperForOLX navigation={navigation} />
                 <Grid>
                     <Row size={1}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Header, Icon, Button, Left, Right, Body, ActionSheet } from 'native-base'
+import { Header, Icon, Button, Left, Right, Body, ActionSheet, Badge } from 'native-base'
 import { Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -32,11 +32,11 @@ export default function HeaderForApp(props) {
             </Left>
             <Body />
             <Right>
-                <View style={{ marginRight: 20 }}>
-                    <Icon style={{ color: 'black', fontSize: 40 }} name='cart' onPress={() => loginUser ? props.navigation.navigate("Cart") : props.navigation.navigate("Login")} />
-                </View>
                 {loginUser ?
-                    <></> :
+                    <View style={{ marginRight: 20 }}>
+                        <Badge danger>{loginUser.card && <Text>{loginUser.card.length}</Text>}</Badge>
+                        <Icon style={{ color: 'black', fontSize: 40 }} name='cart' onPress={() => loginUser ? props.navigation.navigate("Cart") : props.navigation.navigate("Login")} />
+                    </View> :
                     <Icon name="ellipsis-vertical-sharp" style={{ color: 'black', fontSize: 30 }}
                         onPress={() =>
                             ActionSheet.show({
